@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.24;
 
 struct SubDomain {
     bytes32 name;
 }
 
 struct Domain {
-    bytes6 extension;
-    bytes32 name;
+    string extension;
+    string name;
 }
 
 struct Voter {

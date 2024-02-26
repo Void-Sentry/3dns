@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.24;
 
 import { THE_SUBDOMAIN_IS_ALREADY_IN_USE } from "../utils/constants/index.sol";
 import { Holder } from "../roles/holder/holder.sol";
@@ -7,6 +7,21 @@ import { SubDomain } from "../utils/structs/index.sol";
 
 contract SDomainLinked is Holder {
     mapping(bytes => SubDomain[]) private ownedSubDomains;
+    SubDomain[] private subDomains;
+
+    function index(uint16 startIndex, uint16 endIndex) external view returns (SubDomain[] memory) {
+        SubDomain[] memory list;
+
+        require(startIndex < subDomains.length && startIndex >= 0, 'startIndex must be great then 0');
+        require(endIndex < subDomains.length && endIndex > startIndex, 'endIndex must be great then startIndex');
+        
+        unchecked {
+            for (uint16 i = startIndex; i < endIndex; ++i)
+                list[i] = subDomains[i];
+        }
+
+        return list;
+    }
 
     function getSubDomains(bytes6 _extension, bytes32 _name)
         external
@@ -29,5 +44,6 @@ contract SDomainLinked is Holder {
         }
 
         ownedSubDomains[key].push(SubDomain(_name));
+        subDomains.push(SubDomain(_name));
     }
 }

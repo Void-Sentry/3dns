@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.24;
 
 import { ONLY_ADMIN_CAN_UPDATE_CONTRACT, FORWARDING_CALL_FAILED } from "../utils/constants/index.sol";
 import { Holder } from "../roles/holder/holder.sol";
-import { Owner } from "../roles/owner/owner.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IProxy } from "./iproxy.sol";
 
-contract Proxy is Owner, Holder, IProxy {
+contract Proxy is Ownable, Holder {
     address private _delegate;
 
-    constructor(address delegate) {
-        _delegate = delegate;
-        set_owner(msg.sender);
-    }
+    constructor() Ownable(msg.sender) {}
+    // constructor(address delegate) {
+    //     _delegate = delegate;
+    // }
 
-    function setDelegate(address delegate) is_owner external {
-        require(msg.sender == get_owner(), ONLY_ADMIN_CAN_UPDATE_CONTRACT);
+    function setDelegate(address delegate) onlyOwner external {
+        require(msg.sender == owner(), ONLY_ADMIN_CAN_UPDATE_CONTRACT);
         _delegate = delegate;
     }
 

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.24;
 
 import { T3dns } from "contracts/token/t3dns.sol";
 import { ONLY_THE_OWNER_CAN_DO_THIS } from "contracts/utils/constants/index.sol";
