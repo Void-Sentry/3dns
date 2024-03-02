@@ -9,6 +9,10 @@ contract DomainLinked is Holder {
     mapping(address => Domain[]) private ownedDomains;
     Domain[] private domains;
 
+    constructor(address tokenAddress) {
+        set_token_address(tokenAddress);
+    }
+
     function index(uint16 startIndex, uint16 endIndex) external view returns (Domain[] memory) {
         require(startIndex < domains.length && startIndex >= 0, 'startIndex must be greater than or equal to 0');
         require(endIndex < domains.length && endIndex >= startIndex, 'endIndex must be greater than or equal to startIndex');
@@ -31,14 +35,14 @@ contract DomainLinked is Holder {
     function addDomain(string memory _extension, string memory _name) external is_holder {
         Domain[] memory oDomains = ownedDomains[msg.sender];
 
-        // unchecked {
+        unchecked {
             for (uint i; i < oDomains.length; i++) {
                 Domain memory domain = oDomains[i];
                 if (keccak256(bytes(domain.extension)) == keccak256(bytes(_extension)) && keccak256(bytes(domain.name)) == keccak256(bytes(_name))) {
                     revert(THE_DOMAIN_IS_ALREADY_IN_USE);
                 }
             }
-        // }
+        }
 
         ownedDomains[msg.sender].push(Domain(_extension, _name));
         domains.push(Domain(_extension, _name));

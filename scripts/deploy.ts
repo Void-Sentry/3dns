@@ -2,9 +2,13 @@ import { ethers } from "hardhat";
 
 async function main() {
   const [owner] = await ethers.getSigners();
+  const ownerAddress = await owner.getAddress();
 
   const token = await ethers.deployContract('T3dns', owner);
   await token.waitForDeployment();
+
+  const tokenAddress = await token.getAddress();
+  const tokenSymbol = await token.symbol();
 
   const holder = await ethers.deployContract('Holder', owner);
   await holder.waitForDeployment();
@@ -12,7 +16,7 @@ async function main() {
   const ownable = await ethers.deployContract('Owner', owner);
   await ownable.waitForDeployment();
   
-  const domain = await ethers.deployContract('DomainLinked', owner);
+  const domain = await ethers.deployContract('DomainLinked', [tokenAddress], owner);
   await domain.waitForDeployment();
 
   const sdomain = await ethers.deployContract('SDomainLinked', owner);
@@ -21,12 +25,13 @@ async function main() {
   const voteSystem = await ethers.deployContract('VoteSystem', owner);
   await voteSystem.waitForDeployment();
 
-  const tokenAddress = await token.getAddress();
-
   const holderTx = await holder.set_token_address(tokenAddress);
   await holderTx.wait(1);
 
-  // const balance = await token.balanceOf(await owner.getAddress());
+  const balance = await token.balanceOf(ownerAddress);
+
+  const res = await holder.get_token_address();
+  console.log(res);
 
   const addDomainTx = await domain.addDomain('com', 'banana');
   await addDomainTx.wait(1);

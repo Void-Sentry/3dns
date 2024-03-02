@@ -6,10 +6,10 @@ import { Holder } from "../roles/holder/holder.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IProxy } from "./iproxy.sol";
 
-contract Proxy is Ownable, Holder {
+contract Proxy is Holder {
     address private _delegate;
 
-    constructor() Ownable(msg.sender) {}
+    constructor() {}
     // constructor(address delegate) {
     //     _delegate = delegate;
     // }

@@ -12,14 +12,14 @@ import { Holder } from "../roles/holder/holder.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IVoteSystem } from "./ivote-system.sol";
 
-contract VoteSystem is Owner, Holder {
+contract VoteSystem is Holder {
     address[] private chairpersons;
 
     mapping(address => Voter) private voters;
 
     Proposal[] private proposals;
 
-    constructor() Ownable(msg.sender) {
+    constructor() {
         chairpersons.push(msg.sender);
         voters[msg.sender].weight = DEFAULT_WEIGHT;
     }
