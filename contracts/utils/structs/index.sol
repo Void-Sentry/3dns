@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 struct SubDomain {
-    bytes32 name;
+    string name;
 }
 
 struct Domain {
@@ -18,7 +18,8 @@ struct Voter {
 }
 
 struct Proposal {
-    bytes32 name;
+    string name;
+    string description;
     uint256 voteCount;
     bool ended;
 }
